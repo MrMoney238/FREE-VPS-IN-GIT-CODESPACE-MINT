@@ -1,0 +1,38 @@
+Screen {
+    background: #111827;
+    color: white;
+}
+
+#install {
+    width: 20;
+    margin: 1 2;
+    background: green;
+    color: white;
+}
+
+Horizontal {
+    height: auto;
+    margin: 0 1;
+}
+
+Vertical {
+    width: 1fr;
+    margin: 0 1;
+}
+
+SelectionList {
+    height: auto;
+    max-height: 20;
+}
+
+Button {
+    margin: 1 1;
+}
+
+Label {
+    color: #e5e7eb;
+}
+
+Markdown {
+    margin: 1 2;
+}

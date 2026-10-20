@@ -1,0 +1,121 @@
+from textual.app import App, ComposeResult
+from textual.screen import Screen
+from textual.containers import Horizontal, Vertical
+from textual.widgets import Footer, Header, SelectionList, Label, Button, Markdown, Select, Static, Switch
+
+
+def savejson(json):
+    with open('options.json', 'w') as f:
+        f.write(str(json).replace("'", '"').replace("True", "true").replace("False", "false"))
+
+Head = """
+# Mint VPS Installer
+
+> Mint-style desktop environment for GitHub Codespaces
+
+This project turns GitHub Codespaces into a lightweight Ubuntu desktop environment with a Mint-like Cinnamon experience.
+* Runs entirely in a browser
+* Works in GitHub Codespaces
+* Includes a custom Mint-inspired desktop option
+* Installs common apps and desktop tools
+* Built for lightweight remote sessions
+"""
+InstallHead = """
+# Mint VPS Installer
+"""
+
+LINES = [
+    "Linux Mint Cinnamon (Mint-style)",
+    "KDE Plasma (Heavy)",
+    "XFCE4 (Lightweight)",
+    "I3 (Very Lightweight)",
+    "GNOME 42 (Very Heavy)",
+    "Cinnamon",
+    "LXQT"
+]
+
+class InstallScreen(Screen):
+    CSS_PATH = "installer.tcss"
+
+    def compose(self) -> ComposeResult:
+        yield Header()
+        yield Markdown(InstallHead)
+        yield Horizontal(
+            Vertical(
+                Label("Default Apps (you should keep them)"),
+                SelectionList[int](
+                    ("Wine", 0, True),
+                    ("Chrome", 1, True),
+                    ("Xarchiver", 2, True),
+                    ("Discord", 3, True),
+                    ("Steam", 4, True),
+                    ("Minecraft", 5, True),
+                    id="defaultapps"
+                ),
+            ),
+            Vertical(
+                Label("Programming"),
+                SelectionList[int](
+                    ("OpenJDK 8 (jre)", 0),
+                    ("OpenJDK 17 (jre)", 1),
+                    ("VSCodium", 2),
+                    id="programming"
+                ),
+            ),
+            Vertical(
+                Label("Apps"),
+                SelectionList[int](
+                    ("VLC", 0),
+                    ("LibreOffice", 1),
+                    ("Synaptic", 2),
+                    ("AQemu (VMs)", 3),
+                    ("TLauncher", 4),
+                    id="apps"
+                ),
+            ),
+        )
+
+        yield Vertical(
+            Horizontal(
+                Label("\nDesktop Environment :"),
+                Select(id="de", value="Linux Mint Cinnamon (Mint-style)", options=((line, line) for line in LINES)),
+            ),
+        )
+        yield Horizontal(
+            Button.error("Back", id="back"),
+            Button.warning("Install NOW", id="in"),
+        )
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "back":
+            app.pop_screen()
+        if event.button.id == "in":
+            data = {
+                "defaultapps": self.query_one("#defaultapps").selected,
+                "programming": self.query_one("#programming").selected,
+                "apps": self.query_one("#apps").selected,
+                "enablekvm": True,
+                "DE": self.query_one("#de").value,
+            }
+            savejson(data)
+            app.exit()
+
+class InstallApp(App):
+    CSS_PATH = "installer.tcss"
+
+    def compose(self) -> ComposeResult:
+        yield Header()
+        yield Markdown(Head)
+        yield Vertical(
+            Button.success("Install", id="install"),
+        )
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "cancel":
+            print("")
+        if event.button.id == "install":
+            self.push_screen(InstallScreen())
+
+if __name__ == "__main__":
+    app = InstallApp()
+    app.run()
