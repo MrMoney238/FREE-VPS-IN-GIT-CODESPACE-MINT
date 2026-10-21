@@ -1,7 +1,7 @@
 {
-  "defaultapps": [0, 1, 2],
+  "defaultapps": [1, 2],
   "programming": [],
   "apps": [],
   "enablekvm": true,
-  "DE": "Linux Mint Cinnamon (Mint-style)"
+  "DE": "XFCE4 (Lightweight)"
 }

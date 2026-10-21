@@ -2,7 +2,7 @@ FROM ghcr.io/linuxserver/baseimage-kasmvnc:ubuntujammy
 
 ARG DEBIAN_FRONTEND="noninteractive"
 
-# Fix stale NodeSource repo from the base image that breaks apt-get update
+# Fix stale NodeSource repo inherited from the base image.
 RUN rm -f /etc/apt/sources.list.d/nodesource.list /etc/apt/sources.list.d/nodesource.list.save
 
 COPY /root/etc/apt/preferences.d/firefox-no-snap /etc/apt/preferences.d/firefox-no-snap

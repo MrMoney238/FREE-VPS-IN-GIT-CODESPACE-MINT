@@ -78,7 +78,7 @@ class InstallScreen(Screen):
         yield Vertical(
             Horizontal(
                 Label("\nDesktop Environment :"),
-                Select(id="de", value="Linux Mint Cinnamon (Mint-style)", options=((line, line) for line in LINES)),
+                Select(id="de", value="XFCE4 (Lightweight)", options=((line, line) for line in LINES)),
             ),
         )
         yield Horizontal(
